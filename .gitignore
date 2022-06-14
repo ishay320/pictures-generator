@@ -1,0 +1,6 @@
+/genFrames
+/solar_env
+*.csv
+*__pycache__
+*.jpg
+*.png
