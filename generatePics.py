@@ -2,7 +2,7 @@ from random import randint, random
 import cv2
 import numpy as np
 import utils.utils as utils
-import utils.filter as filter
+import utils.blend_mod as blend_mod
 
 
 def create_solar_panel(
@@ -80,7 +80,7 @@ def make_dirty(image, intensity=10, how_much=0.46, base=0.25):
     dirt_mask = cv2.GaussianBlur(dirt_mask, (11, 11), 3)
     dirt_mask = cv2.GaussianBlur(dirt_mask, (11, 11), 3)
     dirt_mask = cv2.GaussianBlur(dirt_mask, (21, 21), 3)
-    return filter.screen(image, dirt_mask)
+    return blend_mod.screen(image, dirt_mask)
 
 
 # setting

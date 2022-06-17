@@ -13,6 +13,6 @@ this is repo fo making generated data for ML and for all the other stuff that wa
 ## how the files sorted
 
 - utils - all the utility function like:
-  - filter - filters like screen multiply and more
+  - blend_mod - blending options like screen multiply and more
   - utils - unsorted functions
 - examples - TBD
