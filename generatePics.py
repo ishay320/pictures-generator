@@ -1,7 +1,8 @@
 from random import randint, random
 import cv2
 import numpy as np
-import utils
+import utils.utils as utils
+import utils.filter as filter
 
 
 def create_solar_panel(
@@ -68,6 +69,20 @@ def create_solar_panel(
     return solar_panel
 
 
+def make_dirty(image, intensity=10, how_much=0.46, base=0.25):
+    # TODO: add big cloud and small and combine them
+    dirt_mask = np.random.normal(0, 1, image.shape)
+    dirt_mask /= dirt_mask.max()
+    dirt_mask[dirt_mask < 1 - how_much] = 0
+    dirt_mask[dirt_mask > 0] = intensity
+    dirt_mask[dirt_mask < base] = base
+    dirt_mask = cv2.GaussianBlur(dirt_mask, (3, 3), 3)
+    dirt_mask = cv2.GaussianBlur(dirt_mask, (11, 11), 3)
+    dirt_mask = cv2.GaussianBlur(dirt_mask, (11, 11), 3)
+    dirt_mask = cv2.GaussianBlur(dirt_mask, (21, 21), 3)
+    return filter.screen(image, dirt_mask)
+
+
 # setting
 seed: int = 69
 width: int = 1920
@@ -85,9 +100,9 @@ frame = np.random.rand(hight, width)*255
 
 # solar setting
 solar_setting = {
-    "base_ratio": 2, "solar_resolution": 300, "background_color": 0, "solar_border": 6,
+    "base_ratio": 2, "solar_resolution": 300, "background_color": 0, "solar_border": 6, "solar_border_color": 0.7,
     "split_half": True, "split_half_distance": 4,
-    "inside_blocks": True, "inside_blocks_x": 10, "inside_blocks_y": 20, "inside_blocks_separate": 1, "inside_blocks_color": 1,
+    "inside_blocks": True, "inside_blocks_x": 10, "inside_blocks_y": 20, "inside_blocks_separate": 1, "inside_blocks_color": 0.7,
     "inside_blocks_tiny": True, "inside_blocks_tiny_number": 7, "inside_blocks_tiny_color": 0.5
 }
 solar_panel = create_solar_panel(**solar_setting)
@@ -103,7 +118,7 @@ frame_array_space_width = 1
 frame_array_space_hight = 2
 
 print(solar_panel.shape)
-cv2.imshow("solar", solar_panel)
+cv2.imshow("solar", make_dirty(solar_panel))
 cv2.waitKey(0)
 # create the array
 
